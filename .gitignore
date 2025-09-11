@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django & Python environment
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# VSCode & editor configs
+.vscode/
+.idea/
+
+# Mac / Windows / Linux
+.DS_Store
+Thumbs.db
+
+# Docker
+*.sqlite3
+*.pid
+*.db
+
+.env
