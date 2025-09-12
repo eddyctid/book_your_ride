@@ -7,8 +7,7 @@ from django.utils.translation import gettext_lazy as _
     
 class CustomUserManager(BaseUserManager):
     """
-    Defines how the User(or the model to which attached)
-    will create users and superusers.
+        Defines how the User(or the model to which attached) will create users and superusers.
     """
     def create_user(self, mobile_num, email, password, **extra_fields):
         """
@@ -17,14 +16,22 @@ class CustomUserManager(BaseUserManager):
         """
         if not email:
             raise ValueError(_("The Email must be set"))
+        
+        if not mobile_num:
+            raise ValueError(_("Mobile number must be set"))
+        
         email = self.normalize_email(email) # lowercase the domain
+
         user = self.model(
             mobile_num=mobile_num,
             email=email,
             **extra_fields
         )
+
         user.set_password(password) # hash raw password and set
+
         user.save()
+
         return user
     
     def create_superuser(self, mobile_num, email, password, **extra_fields):
@@ -37,26 +44,21 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
+
         if extra_fields.get("is_staff") is not True:
-            raise ValueError(
-                _("Superuser must have is_staff=True.")
-            )
+            raise ValueError(_("Superuser must have is_staff=True."))
+        
         if extra_fields.get("is_superuser") is not True:
-            raise ValueError(
-                _("Superuser must have is_superuser=True.")
-            )
-        return self.create_user(
-            mobile_num,
-            email, 
-            password, 
-            **extra_fields
-        )
+            raise ValueError(_("Superuser must have is_superuser=True."))
+        
+        return self.create_user(mobile_num, email, password, **extra_fields)
     
 # Create your models here.
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
     mobile_num = models.CharField(max_length=15, unique=True)
+    
     USERNAME_FIELD = "mobile_num"
     REQUIRED_FIELDS = ["email"]
 
