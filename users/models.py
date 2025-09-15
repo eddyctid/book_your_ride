@@ -4,11 +4,26 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
 
+def modified_normalize_email(email):
+        """
+        Normalize the email address by lowercasing the domain part of it.
+        """
+        email = email or ""
+        try:
+            email_name, domain_part = email.strip().rsplit("@", 1)
+        except ValueError:
+            pass
+        else:
+            email = email_name.lower() + "@" + domain_part.lower()
+        return email
     
 class CustomUserManager(BaseUserManager):
     """
         Defines how the User(or the model to which attached) will create users and superusers.
     """
+    
+    
+    
     def create_user(self, mobile_num, email, password, **extra_fields):
         """
         Create and save a user with the given email, password,
@@ -20,7 +35,12 @@ class CustomUserManager(BaseUserManager):
         if not mobile_num:
             raise ValueError(_("Mobile number must be set"))
         
-        email = self.normalize_email(email) # lowercase the domain
+        print(email)
+        email = modified_normalize_email(email) # lowercase the domain
+        print(email)
+
+        if self.model.objects.filter(email=email).exists():
+            raise ValueError(_("This email is already registered"))
 
         user = self.model(
             mobile_num=mobile_num,
