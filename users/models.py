@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 def modified_normalize_email(email):
         """
-        Normalize the email address by lowercasing the domain part of it.
+        Normalize the email address by lowercasing it.
         """
         email = email or ""
         try:
@@ -21,14 +21,7 @@ class CustomUserManager(BaseUserManager):
     """
         Defines how the User(or the model to which attached) will create users and superusers.
     """
-    
-    
-    
     def create_user(self, mobile_num, email, password, **extra_fields):
-        """
-        Create and save a user with the given email, password,
-        and date_of_birth.
-        """
         if not email:
             raise ValueError(_("The Email must be set"))
         
@@ -73,7 +66,7 @@ class CustomUserManager(BaseUserManager):
         
         return self.create_user(mobile_num, email, password, **extra_fields)
     
-# Create your models here.
+
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
@@ -83,6 +76,11 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ["email"]
 
     objects = CustomUserManager()
-    
+
+    def save(self, *args, **kwargs):
+        if self.email:
+            self.email = self.email.lower().strip()
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.email
