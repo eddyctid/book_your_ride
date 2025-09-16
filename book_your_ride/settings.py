@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'users_v3.apps.UsersV3Config',
+    'services.apps.ServicesConfig',
 ]
 
 AUTH_USER_MODEL = "users_v3.CustomUser"
