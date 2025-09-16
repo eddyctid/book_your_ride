@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsersV2Config(AppConfig):
+class ServicesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'users_v2'
+    name = 'services'

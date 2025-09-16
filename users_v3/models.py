@@ -12,8 +12,16 @@ class CustomUser(AbstractUser):
     email = models.EmailField(_("email address"),unique=True)
     mobile_num = models.CharField(_("mobile number"),max_length=15, unique=True)
 
-    objects = CustomUserManager()
+    
+    ROLE_CHOICES = [
+        ("dealer", "Dealer"),
+        ("customer", "Customer"),
+        ("mechanic", "Mechanic"),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="customer")
 
+    objects = CustomUserManager()
+    
     USERNAME_FIELD = "mobile_num"
     REQUIRED_FIELDS = ["email"]
 
